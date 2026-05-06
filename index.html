@@ -88,14 +88,7 @@
 # Tone & Formatting
 - ใช้ภาษาที่เป็นกันเอง (เช่น "ผมสรุปข้อมูลให้เบื้องต้นนะครับ...", "จากที่ Customer เล่ามา ผมมองว่า...")
 - ใช้ Markdown (Bold, Bullet Points) ให้ชัดเจน อ่านง่าย เหมาะกับการ Copy ไปใช้งานต่อ
-
----
-# AVAILABLE COURSES (รายการคอร์สที่มี):
-
----
-# CUSTOMER REQUIREMENT (ข้อมูลลูกค้า):
-
----</textarea>
+</textarea>
                 </div>
             </details>
         </div>
@@ -109,8 +102,8 @@
                             <span class="mr-2 text-blue-500">📚</span> Available Courses
                         </h2>
                         <label class="cursor-pointer bg-blue-50 text-blue-600 px-3 py-1 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">
-                            📁 แนบไฟล์ .txt
-                            <input type="file" accept=".txt" class="hidden-input" onchange="handleFileUpload(event)">
+                            📁 แนบไฟล์
+                            <input type="file" accept=".txt,.csv,text/plain,text/csv" class="hidden-input" onchange="handleFileUpload(event)">
                         </label>
                     </div>
                     <textarea id="courseList" class="w-full h-32 p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm" placeholder="พิมพ์รายการคอร์สที่นี่ หรือกดแนบไฟล์ .txt เพื่อดึงข้อมูลอัตโนมัติ..."></textarea>
