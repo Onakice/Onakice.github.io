@@ -1,0 +1,69 @@
+Course Name
+Introduction to GitHub Actions (ฉบับเร่งรัด)
+Test-Driven Development with .NET Core C#
+DevOps Workshop (Design-Develop-Deploy)
+Computer Vision Basics with OpenCV
+Machine Learning Basics
+Python programming basics
+Introduction to GitHub Actions (Spreadsheet)
+Ultimate UX/UI Design with Figma (Team Development)
+Efficient Development with GitHub & GitHub Actions
+Ultimate UX/UI Design with Figma
+Start Step UI Design with Figma
+Back-End Development Essentials
+การพัฒนาโปรแกรมด้วยภาษา Python และ ฐานข้อมูล SQL
+Full Stack Development with React & Express
+Prompt Engineering with GitHub Copilot
+เรียนรู้การใช้ Cloud-native ด้วย Azure Container Apps
+Course Spring Framework and Spring Boot 2024
+Generative AI สำหรับองค์กร
+สร้างแอปแบบ No-Code
+พัฒนาเว็บแอปพลิเคชันด้วย .NET Core และ Next.js
+LEAN UX/UI DESIGN with Figma
+เสริมความปลอดภัยให้ Pipeline ด้วย Azure DevOps
+เรียนรู้การใช้ Cloud-native ด้วย Azure Container Apps
+เรียนรู้การใช้งาน AI ตั้งแต่พื้นฐานจนถึงขั้นสูงบน Microsoft Azure
+Golang for Back-End Developers
+Software Design Pattern
+หลักสูตรการพัฒนาเว็บแอปพลิเคชันด้วย Java
+การพัฒนาแอปพลิเคชันด้วย Python และ MySQL สำหรับผู้เริ่มต้น
+GitHub Copilot for Developers
+Basic Python for Excel
+Azure AI: From Basics to Advanced
+Full-Stack Automated Testing & CI/CD Mastery
+หลักสูตรเพิ่มประสิทธิภาพให้กับระบบ Back-End
+Generative AI สำหรับนักพัฒนาซอฟต์แวร์
+Introduction to Computer Vision
+Digital Product Research and Design
+Essential Front-End Development
+เจาะลึกการใช้งาน AI บน Azure
+การพัฒนาเว็บแอปพลิเคชันด้วย ASP.NET Core และ Next.js
+หลักสูตร Rust และ Iced Framework
+System Analysis
+ChatGPT สำหรับองค์กร
+Generative AI สำหรับองค์กร
+SYSTEM ANALYSIS AND DESIGN
+Advance SQL
+Creative Mastery Training with Canva
+Game Development with Unity
+Basic Power BI
+Programming with React Native
+Software Testing for IT
+Information Gathering Techniques for Business Analysis
+Introduction to Information Gathering for SA/BA
+Web Scraping with Python for Non Programmers
+PHP Secure Coding ตามหลักกการ OWASP Top 10
+Basic of Kubernetes
+Web Application Development With Flask
+Intensive Python 3 For Business
+Ultimate UX/UI Design with Figma
+การออกแบบ UI ด้วย Adobe XD
+Essential UX/UI Design
+Back-end Development with Next.js
+Basic Front-End Developer II
+Ultimate UI Design with Figma [From Design to code]
+Basic Python 3 For Business
+Ultimate PowerPoint 2 วัน
+React for Developer
+Game Development with Unity 3 ชั่วโมง
+Professional UX/UI Design with Figma
