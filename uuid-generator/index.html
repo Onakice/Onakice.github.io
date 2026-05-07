@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>UUID Generator</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>UUID Generator</h1>
+
+      <div class="quick-buttons">
+        <button onclick="setCount(1)">1</button>
+        <button onclick="setCount(10)">10</button>
+        <button onclick="setCount(100)">100</button>
+        <button onclick="setCount(1000)">1000</button>
+      </div>
+
+      <input
+        type="number"
+        id="count"
+        min="1"
+        max="1000"
+        value="10"
+        placeholder="Enter amount"
+      />
+
+      <div id="result" class="result-box"></div>
+
+      <div class="buttons">
+        <button onclick="generateUUIDs()">Generate</button>
+
+        <button onclick="copyUUIDs()">Copy</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
