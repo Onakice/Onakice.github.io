@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>borntoDev - System Prompt Generator</title>
+    <script src="https://cdn.tailwindcss.com/"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'IBM Plex Sans Thai', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col justify-between">
+
+    <header class="bg-gray-800 border-b border-gray-700 py-4 px-6 shadow-md">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <h1 class="text-xl font-bold tracking-wide text-orange-500">
+                🦖 borntoDev <span class="text-white font-light text-sm ml-2">| System Prompt Builder</span>
+            </h1>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-6 w-full grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow">
+        
+        <div class="flex flex-col bg-gray-800 p-5 rounded-xl border border-gray-700 shadow-lg">
+            <h2 class="text-lg font-medium mb-3 flex items-center gap-2 text-gray-300">
+                📥 1. วางเนื้อหาโพสต์ดิบ (Raw Content)
+            </h2>
+            <p class="text-xs text-gray-400 mb-2">วางเนื้อหาต้นฉบับที่ต้องการให้ AI นำไปจัดระเบียบสลับอิโมจิและคั่นจุด</p>
+            <textarea id="rawContent" class="w-full flex-grow p-4 bg-gray-950 text-gray-200 border border-gray-700 rounded-lg focus:outline-none focus:border-orange-500 resize-none font-light leading-relaxed min-h-[350px]" placeholder="ทุกวันนี้เวลายิงคำสั่งรันระบบทดสอบในเครื่อง..."></textarea>
+            <button onclick="generateSystemPrompt()" class="mt-4 w-full bg-orange-600 hover:bg-orange-500 text-white font-medium py-3 rounded-lg transition-all duration-200 shadow-md transform active:scale-[0.98]">
+                ประกอบร่างเป็น System Prompt 🚀
+            </button>
+        </div>
+
+        <div class="flex flex-col bg-gray-800 p-5 rounded-xl border border-gray-700 shadow-lg">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-lg font-medium flex items-center gap-2 text-gray-300">
+                    📋 2. ผลลัพธ์ System Prompt (พร้อมก๊อปปี้ไปส่งต่อ)
+                </h2>
+                <button onclick="copyPromptToClipboard()" class="text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 py-1.5 px-3 rounded-md transition-all flex items-center gap-1">
+                    ✨ คัดลอกพรอพต์ทั้งหมด
+                </button>
+            </div>
+            <textarea id="finalPromptOutput" readonly class="w-full flex-grow p-4 bg-gray-950 text-emerald-400 border border-gray-700 rounded-lg focus:outline-none font-mono text-xs leading-relaxed resize-none min-h-[350px]" placeholder="คลิกปุ่มซ้ายมือเพื่อสร้าง System Prompt..."></textarea>
+        </div>
+
+    </main>
+
+    <footer class="bg-gray-800 border-t border-gray-700 py-3 text-center text-xs text-gray-500">
+        พร้อมเปลี่ยนคนทำงาน ให้ก้าวสู่การเป็น Dev / Tech Expert
+    </footer>
+
+    <script>
+        function generateSystemPrompt() {
+            const rawContent = document.getElementById('rawContent').value.trim();
+            if (!rawContent) {
+                alert('กรุณากรอกข้อความดิบก่อนครับพี่วิน!');
+                return;
+            }
+
+            // แม่แบบ System Prompt ที่พึ่งรีแฟคเตอร์กันเสร็จเรียบร้อย
+            const systemPromptTemplate = `# Role
+คุณคือ Text Formatting Assistant หน้าที่หลักคือจัดรูปแบบข้อความสำหรับโพสต์ Social Media โดยห้ามแก้ไขคำ หรือตัดเนื้อความใดๆ ของต้นฉบับทิ้งเด็ดขาด 
+
+# Output Rules (กฎการจัดรูปแบบ)
+1. **เก็บเนื้อหาครบถ้วน:** ห้ามตัดย่อหน้าใดๆ ทิ้ง (รวมถึงย่อหน้าคำถาม "แล้วเพื่อนๆ ล่ะครับ...") ให้รักษาข้อความต้นฉบับไว้ครบทุกคำ
+2. **เติมจุดคั่น (.):** ใส่เครื่องหมายจุด (.) ในบรรทัดเปล่า แยกเดี่ยวๆ ไว้ที่:
+   - บรรทัดแรกสุดของโพสต์
+   - ระหว่างย่อหน้าทุกย่อหน้า
+   - บรรทัดสุดท้ายสุดของโพสต์
+3. **จำกัดอิโมจิ:** แต่ละย่อหน้าต้องมีอิโมจิได้แค่ "ตัวเดียว" และต้องอยู่ "หน้าย่อหน้า" เท่านั้น (หากมีอยู่ท้ายหรือกลางประโยค ให้ลบออกแล้วย้ายมาไว้ข้างหน้า)
+4. **ตรรกะสลับอิโมจิย้อนกลับ (มี -> ไม่มี):** เนื้อความยังเรียงจากย่อหน้าแรกไปย่อหน้าสุดท้ายตามปกติ แต่ตรรกะการใส่หรือเว้นอิโมจิหน้าย่อหน้า ต้องสลับกันโดยยึดจากท้ายย่อหน้าขึ้นไปดังนี้:
+
+# Strict Emoji Layout (บังคับโครงสร้างอิโมจิสลับจากล่างขึ้นบน)
+- . (เปิดหัวบรรทัดแรกสุด)
+- [ย่อหน้าแรกสุดของบทความ] -> (ใส่หรือเว้นอิโมจิ ตามลำดับที่นับสลับมาจากด้านล่าง)
+- .
+- ... (ย่อหน้าอื่นๆ เรียงเนื้อหาตามปกติ สลับแบบ มีอิโมจิ / ไม่มีอิโมจิ) ...
+- .
+- [ย่อหน้าก่อนรองสุดท้าย] -> 💡 (บังคับ: มีอิโมจิอยู่ข้างหน้าตัวเดียว)
+- .
+- [ย่อหน้ารองสุดท้าย] -> ❌ (บังคับ: ห้ามมีอิโมจิเด็ดขาด! หากต้นฉบับมีอิโมจิ เช่น 💬 หรือตัวอื่น ให้ลบออกให้หมดจนข้อความว่างเปล่าไม่มีอิโมจิเหลืออยู่เลย)
+- .
+- 🦖 #borntoDev - พร้อมเปลี่ยนคนทำงาน ให้ก้าวสู่การเป็น Dev / Tech Expert (บังคับ: มีไดโนเสาร์ตัวเดียว)
+- . (ปิดท้ายบรรทัดสุดท้ายสุด)
+
+---
+# [INPUT TEXT]:
+${rawContent}
+---`;
+
+            document.getElementById('finalPromptOutput').value = systemPromptTemplate;
+        }
+
+        function copyPromptToClipboard() {
+            const outputText = document.getElementById('finalPromptOutput');
+            if (!outputText.value) {
+                alert('ยังไม่มีข้อความพรอพต์ให้คัดลอกครับ!');
+                return;
+            }
+            outputText.select();
+            outputText.setSelectionRange(0, 99999); 
+            navigator.clipboard.writeText(outputText.value);
+            alert('คัดลอก System Prompt ไปที่ Clipboard เรียบร้อยแล้ว! เอาไปโยนใส่ AI ต่อได้เลยครับ 🦖🎉');
+        }
+    </script>
+</body>
+</html>
