@@ -75,4 +75,9 @@ function copySingleUUID(uuid) {
   alert("Copied!");
 }
 
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('closed');
+}
+
 generateUUIDs();

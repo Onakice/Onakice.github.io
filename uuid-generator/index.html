@@ -6,9 +6,25 @@
 
     <title>UUID Generator</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-title">เมนู</div>
+      <ul class="nav-menu">
+        <li><a href="../">🏠 Home</a></li>
+        <li><a href="../text-scanner/">📄 Text Scanner</a></li>
+        <li><a href="../content-formatter/">📋 Content Formatter</a></li>
+        <li><a href="../uuid-generator/" class="active">🆔 UUID Generator</a></li>
+      </ul>
+    </aside>
+
+    <button class="toggle-sidebar" onclick="toggleSidebar()">☰</button>
+
+    <div class="main-content">
     <div class="container">
       <h1>UUID Generator</h1>
 
@@ -35,6 +51,7 @@
 
         <button onclick="copyUUIDs()">Copy</button>
       </div>
+    </div>
     </div>
 
     <script src="script.js"></script>
