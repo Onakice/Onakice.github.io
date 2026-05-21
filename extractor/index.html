@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Extractor & Merger</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f6f9;
+            padding: 40px 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: #ffffff;
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.95rem;
+        }
+        textarea {
+            width: 100%;
+            height: 140px;
+            padding: 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            resize: vertical;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            transition: border-color 0.2s;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+        }
+        button {
+            width: 100%;
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #2b6cb0;
+        }
+        button:active {
+            background-color: #2c5282;
+        }
+        /* Notification style */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #48bb78;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none;
+            font-weight: 500;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Content Extractor & Merger</h2>
+    
+    <!-- Input ช่องที่ 1 (ตัวที่จะโดนสกัดเลขออก) -->
+    <div class="form-group">
+        <label for="inputText1">Input 1: (ช่องที่จะสกัดตัวเลขด้านหน้าออก)</label>
+        <textarea id="inputText1" placeholder="วางข้อความต้นฉบับที่นี่...">66 - tools & framework
+• Title: Tools กับ Framework ต่างกันยังไงกันแน่?
+• Subtitle: เคลียร์ให้ชัด จะได้เลือกใช้ถูก ไม่ปล่อยไก่กลางวงคุย</textarea>
+    </div>
+
+    <!-- Input ช่องที่ 2 (ตัวที่จะเอามาวางรวม) -->
+    <div class="form-group">
+        <label for="inputText2">Input 2: (ข้อความที่จะเอามาวางรวมเพิ่มด้านล่าง)</label>
+        <textarea id="inputText2" placeholder="วางข้อความเพิ่มเติมที่จะนำมารวมที่นี่..."></textarea>
+    </div>
+
+    <!-- ปุ่มกด Process -->
+    <button onclick="processAndCopy()">สกัดและรวมข้อความ (Copy to Clipboard)</button>
+</div>
+
+<!-- Toast แจ้งเตือนเมื่อคัดลอกสำเร็จ -->
+<div id="toast" class="toast">คัดลอกลง Clipboard เรียบร้อยแล้ว!</div>
+
+<script>
+function processAndCopy() {
+    const input1 = document.getElementById('inputText1').value.trim();
+    const input2 = document.getElementById('inputText2').value.trim();
+
+    if (!input1) {
+        alert('กรุณาใส่ข้อความในช่องแรกก่อนครับคุณวิน');
+        return;
+    }
+
+    // ใช้ Regex ตัดตัวเลขและเครื่องหมายลบที่อยู่บรรทัดแรกสุดออก
+    // "66 - tools & framework" -> "tools & framework"
+    const cleanedInput1 = input1.replace(/^\d+\s*-\s*/, '');
+
+    // นำมารวมกัน ถ้ามีช่อง 2 ให้เว้นบรรทัดสไตล์คอนเทนต์ borntoDev ให้สวยงาม
+    let finalCode = '';
+    if (input2) {
+        finalCode = cleanedInput1 + '\n\n' + input2;
+    } else {
+        finalCode = cleanedInput1;
+    }
+
+    // ฟังก์ชันคัดลอกลง Clipboard ด้วย Web API ยุคใหม่
+    navigator.clipboard.writeText(finalCode).then(() => {
+        showToast();
+    }).catch(err => {
+        console.error('ไม่สามารถคัดลอกได้: ', err);
+        alert('เกิดข้อผิดพลาดในการก๊อปปี้ กรุณาลองใหม่อีกครั้งครับ');
+    });
+}
+
+function showToast() {
+    const toast = document.getElementById('toast');
+    toast.style.display = 'block';
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 2500); // แสดงหน้าต่างแจ้งเตือน 2.5 วินาทีแล้วซ่อนลงไป
+}
+</script>
+
+</body>
+</html>
