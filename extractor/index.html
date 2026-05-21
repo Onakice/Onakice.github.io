@@ -57,24 +57,41 @@
             border-color: #3182ce;
             box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
         }
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .sub-btn-group {
+            display: flex;
+            gap: 10px;
+        }
         button {
-            width: 100%;
-            background-color: #3182ce;
-            color: white;
             border: none;
             padding: 14px;
             font-size: 1rem;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
         }
-        button:hover {
-            background-color: #2b6cb0;
+        .btn-main {
+            width: 100%;
+            background-color: #3182ce;
+            color: white;
         }
-        button:active {
-            background-color: #2c5282;
+        .btn-main:hover { background-color: #2b6cb0; }
+        
+        .btn-sub {
+            flex: 1;
+            background-color: #edf2f7;
+            color: #4a5568;
+            font-size: 0.9rem;
+            padding: 12px;
         }
+        .btn-sub:hover { background-color: #e2e8f0; color: #2d3748; }
+
         /* Notification style */
         .toast {
             position: fixed;
@@ -100,29 +117,39 @@
 <div class="container">
     <h2>Content Extractor & Merger</h2>
     
-    <!-- Input ช่องที่ 1 (ตัวที่จะโดนสกัดเลขออก) -->
+    <!-- Input ช่องที่ 1 -->
     <div class="form-group">
-        <label for="inputText1">Input 1: (ช่องที่จะสกัดตัวเลขด้านหน้าออก)</label>
+        <label for="inputText1">Input 1: (ช่องสกัดตัวเลขและเนื้อหาหลัก)</label>
         <textarea id="inputText1" placeholder="วางข้อความต้นฉบับที่นี่...">66 - tools & framework
 • Title: Tools กับ Framework ต่างกันยังไงกันแน่?
 • Subtitle: เคลียร์ให้ชัด จะได้เลือกใช้ถูก ไม่ปล่อยไก่กลางวงคุย</textarea>
     </div>
 
-    <!-- Input ช่องที่ 2 (ตัวที่จะเอามาวางรวม) -->
+    <!-- Input ช่องที่ 2 -->
     <div class="form-group">
         <label for="inputText2">Input 2: (ข้อความที่จะเอามาวางรวมเพิ่มด้านล่าง)</label>
         <textarea id="inputText2" placeholder="วางข้อความเพิ่มเติมที่จะนำมารวมที่นี่..."></textarea>
     </div>
 
-    <!-- ปุ่มกด Process -->
-    <button onclick="processAndCopy()">สกัดและรวมข้อความ (Copy to Clipboard)</button>
+    <!-- กลุ่มปุ่มจัดการด้านล่าง -->
+    <div class="button-group">
+        <!-- ปุ่มหลัก: รวมและสกัดทั้งหมด -->
+        <button class="btn-main" onclick="processAndCopyAll()">สกัดและรวมข้อความทั้งหมด</button>
+        
+        <!-- ปุ่มย่อย: เลือกก๊อปปี้เจาะจงเนื้อหา -->
+        <div class="sub-btn-group">
+            <button class="btn-sub" onclick="copySpecific('title')">📋 Copy แค่เนื้อ Title</button>
+            <button class="btn-sub" onclick="copySpecific('subtitle')">📋 Copy แค่เนื้อ Subtitle</button>
+        </div>
+    </div>
 </div>
 
 <!-- Toast แจ้งเตือนเมื่อคัดลอกสำเร็จ -->
 <div id="toast" class="toast">คัดลอกลง Clipboard เรียบร้อยแล้ว!</div>
 
 <script>
-function processAndCopy() {
+// ฟังก์ชันสกัดและรวมข้อความทั้งหมด (ฟีเจอร์เดิม)
+function processAndCopyAll() {
     const input1 = document.getElementById('inputText1').value.trim();
     const input2 = document.getElementById('inputText2').value.trim();
 
@@ -131,20 +158,47 @@ function processAndCopy() {
         return;
     }
 
-    // ใช้ Regex ตัดตัวเลขและเครื่องหมายลบที่อยู่บรรทัดแรกสุดออก
-    // "66 - tools & framework" -> "tools & framework"
     const cleanedInput1 = input1.replace(/^\d+\s*-\s*/, '');
+    let finalCode = input2 ? cleanedInput1 + '\n\n' + input2 : cleanedInput1;
 
-    // นำมารวมกัน ถ้ามีช่อง 2 ให้เว้นบรรทัดสไตล์คอนเทนต์ borntoDev ให้สวยงาม
-    let finalCode = '';
-    if (input2) {
-        finalCode = cleanedInput1 + '\n\n' + input2;
-    } else {
-        finalCode = cleanedInput1;
+    executeCopy(finalCode);
+}
+
+// ฟังก์ชันใหม่: ดึงเฉพาะเนื้อหาของ Title หรือ Subtitle
+function copySpecific(type) {
+    const input1 = document.getElementById('inputText1').value;
+    
+    if (!input1) {
+        alert('กรุณาใส่ข้อความในช่องแรกก่อนครับคุณวิน');
+        return;
     }
 
-    // ฟังก์ชันคัดลอกลง Clipboard ด้วย Web API ยุคใหม่
-    navigator.clipboard.writeText(finalCode).then(() => {
+    let regex;
+    let errorMsg = '';
+
+    if (type === 'title') {
+        // ดึงข้อความหลังคำว่า • Title: จนจบชื่อบรรทัดนั้น
+        regex = /•\s*Title:\s*(.*)/i;
+        errorMsg = 'ไม่พบรูปแบบ "• Title:" ในช่อง Input 1 ครับ';
+    } else if (type === 'subtitle') {
+        // ดึงข้อความหลังคำว่า • Subtitle: จนจบชื่อบรรทัดนั้น
+        regex = /•\s*Subtitle:\s*(.*)/i;
+        errorMsg = 'ไม่พบรูปแบบ "• Subtitle:" ในช่อง Input 1 ครับ';
+    }
+
+    const match = input1.match(regex);
+
+    if (match && match[1]) {
+        const textToCopy = match[1].trim();
+        executeCopy(textToCopy);
+    } else {
+        alert(errorMsg);
+    }
+}
+
+// ฟังก์ชันสั่งสำเนาลง Clipboard และขึ้นแจ้งเตือน
+function executeCopy(text) {
+    navigator.clipboard.writeText(text).then(() => {
         showToast();
     }).catch(err => {
         console.error('ไม่สามารถคัดลอกได้: ', err);
@@ -157,7 +211,7 @@ function showToast() {
     toast.style.display = 'block';
     setTimeout(() => {
         toast.style.display = 'none';
-    }, 2500); // แสดงหน้าต่างแจ้งเตือน 2.5 วินาทีแล้วซ่อนลงไป
+    }, 2000);
 }
 </script>
 
