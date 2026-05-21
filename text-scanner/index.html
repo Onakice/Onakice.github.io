@@ -134,6 +134,12 @@
             font-size: 1.1rem;
             margin-left: 5px;
         }
+        .stat-box.match-box {
+            border-color: #f59e0b;
+        }
+        .stat-box.match-box span {
+            color: #f59e0b;
+        }
         .input-group {
             margin-bottom: 20px;
         }
@@ -240,11 +246,12 @@
     <div class="stats-container">
         <div class="stat-box">จำนวนคำ: <span id="wordCount">0</span></div>
         <div class="stat-box">ตัวอักษรทั้งหมด: <span id="charCount">0</span></div>
+        <div class="stat-box match-box">พบคำที่ค้นหา: <span id="matchCount">0</span></div>
     </div>
 
     <div class="input-group">
         <label for="searchWord">คำที่ต้องการ Highlight (เคาะ Spacebar เพื่อแยกคำ เช่น คุณ ผม ครับ):</label>
-        <input type="text" id="searchWord" placeholder="พิมพ์คำที่ต้องการเว้นวรรค เช่น คุณ ผม" value="คุณ ผม ขาด คอนฟิก">
+        <input type="text" id="searchWord" placeholder="พิมพ์คำที่ต้องการเว้นวรรค เช่น คุณ ผม" value="คุณ ผม ขาด คอนฟิก พิสดาร สกปรก ยัด">
     </div>
 
     <label>วางข้อความของคุณ:</label>
@@ -260,6 +267,9 @@
     const searchWordInput = document.getElementById('searchWord');
     const wordCountSpan = document.getElementById('wordCount');
     const charCountSpan = document.getElementById('charCount');
+    
+    const matchCountSpan = document.getElementById('matchCount'); 
+    const segmenter = new Intl.Segmenter('th', { granularity: 'word' }); // สำหรับนับคำไทยแท้
 
     function processText() {
         const text = textInput.value;
