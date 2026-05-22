@@ -120,9 +120,8 @@
     <!-- Input ช่องที่ 1 -->
     <div class="form-group">
         <label for="inputText1">Input 1: (ช่องสกัดตัวเลขและเนื้อหาหลัก)</label>
-        <textarea id="inputText1" placeholder="วางข้อความต้นฉบับที่นี่...">66 - tools & framework
-• Title: Tools กับ Framework ต่างกันยังไงกันแน่?
-• Subtitle: เคลียร์ให้ชัด จะได้เลือกใช้ถูก ไม่ปล่อยไก่กลางวงคุย</textarea>
+        <textarea id="inputText1" placeholder="วางข้อความต้นฉบับที่นี่...">Title: เขียน FastAPI ใครยังพิมพ์ uvicorn main:app --reload ยาว ๆ อยู่บ้าง?
+Subtitle: สั่งรันเซิร์ฟเวอร์สั้น ๆ แค่ fastapi dev คำเดียวจบ ชีวิตดีขึ้นแบบ 300%!</textarea>
     </div>
 
     <!-- Input ช่องที่ 2 -->
@@ -148,7 +147,7 @@
 <div id="toast" class="toast">คัดลอกลง Clipboard เรียบร้อยแล้ว!</div>
 
 <script>
-// ฟังก์ชันสกัดและรวมข้อความทั้งหมด (ฟีเจอร์เดิม)
+// ฟังก์ชันสกัดและรวมข้อความทั้งหมด (ตัดเลขหัวข้อ ถ้ามี)
 function processAndCopyAll() {
     const input1 = document.getElementById('inputText1').value.trim();
     const input2 = document.getElementById('inputText2').value.trim();
@@ -158,13 +157,14 @@ function processAndCopyAll() {
         return;
     }
 
+    // รองรับกรณีมีเลขนำหน้า เช่น "66 - " หรือดึงข้อความปกติได้เลย
     const cleanedInput1 = input1.replace(/^\d+\s*-\s*/, '');
     let finalCode = input2 ? cleanedInput1 + '\n\n' + input2 : cleanedInput1;
 
     executeCopy(finalCode);
 }
 
-// ฟังก์ชันใหม่: ดึงเฉพาะเนื้อหาของ Title หรือ Subtitle
+// ฟังก์ชันดึงเนื้อหาของ Title หรือ Subtitle (อัปเดต Regex ให้ยืดหยุ่นขึ้น)
 function copySpecific(type) {
     const input1 = document.getElementById('inputText1').value;
     
@@ -177,13 +177,13 @@ function copySpecific(type) {
     let errorMsg = '';
 
     if (type === 'title') {
-        // ดึงข้อความหลังคำว่า • Title: จนจบชื่อบรรทัดนั้น
-        regex = /•\s*Title:\s*(.*)/i;
-        errorMsg = 'ไม่พบรูปแบบ "• Title:" ในช่อง Input 1 ครับ';
+        // อัปเดต Regex: รองรับทั้งที่มีหรือไม่มีเครื่องหมาย • ด้านหน้าคำว่า Title
+        regex = /(?:•\s*)?Title:\s*(.*)/i;
+        errorMsg = 'ไม่พบรูปแบบ "Title:" ในช่อง Input 1 ครับ';
     } else if (type === 'subtitle') {
-        // ดึงข้อความหลังคำว่า • Subtitle: จนจบชื่อบรรทัดนั้น
-        regex = /•\s*Subtitle:\s*(.*)/i;
-        errorMsg = 'ไม่พบรูปแบบ "• Subtitle:" ในช่อง Input 1 ครับ';
+        // อัปเดต Regex: รองรับทั้งที่มีหรือไม่มีเครื่องหมาย • ด้านหน้าคำว่า Subtitle
+        regex = /(?:•\s*)?Subtitle:\s*(.*)/i;
+        errorMsg = 'ไม่พบรูปแบบ "Subtitle:" ในช่อง Input 1 ครับ';
     }
 
     const match = input1.match(regex);
