@@ -288,6 +288,7 @@
         const searchInput = searchWordInput.value;
         if (!searchInput.trim() || !text) {
             backdrop.innerHTML = escapeHTML(text);
+            matchCountSpan.textContent = "0";
             return;
         }
 
@@ -297,6 +298,7 @@
 
         if (searchWords.length === 0) {
             backdrop.innerHTML = escapeHTML(text);
+            matchCountSpan.textContent = "0";
             return;
         }
 
@@ -308,6 +310,17 @@
 
         // ไฮไลต์คำที่แมตช์
         highlightedText = highlightedText.replace(regex, '<mark>$1</mark>');
+        
+        let highlightCount = 0; // 1. สร้างตัวแปรมาเก็บค่าไว้นับ
+
+        // 2. ทุกครั้งที่ Regex ทำงานเจอคำและแทนที่ด้วย <mark> เราจะบวกค่าตัวแปรเพิ่มทีละ 1
+        highlightedText = highlightedText.replace(regex, (match) => {
+            highlightCount++; // เจอ 1 คำ เก็บค่าลงตัวแปรเพิ่ม 1
+            return `<mark>${match}</mark>`;
+        });
+        
+        // 3. เอาค่าในตัวแปรมาแสดงผลที่หน้าจอ
+        matchCountSpan.textContent = highlightCount;
         
         backdrop.innerHTML = highlightedText;
     }
