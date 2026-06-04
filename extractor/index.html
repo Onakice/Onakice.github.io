@@ -5,30 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Content Extractor & Merger</title>
     <style>
-        * {
+* {
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #f4f6f9;
+            background-color: #121214; /* เปลี่ยนเป็นพื้นหลังมืดสนิท */
             padding: 40px 20px;
             margin: 0;
             display: flex;
             justify-content: center;
         }
         .container {
-            background: #ffffff;
+            background: #1e1e24; /* กล่องข้อความสีเทาเข้ม */
             max-width: 600px;
             width: 100%;
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* ปรับเงาให้เข้ากับธีมมืด */
         }
         h2 {
             margin-top: 0;
-            color: #333;
+            color: #ffffff; /* หัวข้อสีขาวเด่น */
             font-size: 1.5rem;
-            border-bottom: 2px solid #edf2f7;
+            border-bottom: 2px solid #2d2d34; /* เส้นคั่นสีเทาเข้ม */
             padding-bottom: 10px;
         }
         .form-group {
@@ -38,24 +38,32 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #4a5568;
+            color: #a0aec0; /* สี Label เทาอ่อน สบายตา */
             font-size: 0.95rem;
         }
         textarea {
             width: 100%;
             height: 140px;
             padding: 12px;
-            border: 1px solid #cbd5e0;
+            background-color: #2d2d34; /* พื้นหลังช่องพิมพ์สีเทาเข้ม */
+            border: 1px solid #4a4a5a; /* ขอบสีเทาหม่น */
             border-radius: 8px;
             resize: vertical;
             font-size: 0.95rem;
             line-height: 1.5;
+            color: #ffffff; /* ตัวอักษรสีขาว */
             transition: border-color 0.2s;
         }
         textarea:focus {
             outline: none;
-            border-color: #3182ce;
-            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+            border-color: #3182ce; /* ไฮไลท์สีฟ้าเมื่อกดเลือก */
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+        }
+        /* ดักจับกรณีช่องสำหรับอ่านอย่างเดียว (Readonly) ให้มืดลงอีกนิด */
+        textarea[readonly] {
+            background-color: #232329;
+            color: #cbd5e0;
+            border-color: #3a3a45;
         }
         .button-group {
             display: flex;
@@ -78,30 +86,30 @@
         }
         .btn-main {
             width: 100%;
-            background-color: #3182ce;
+            background-color: #3182ce; /* ปุ่มหลักสีฟ้า */
             color: white;
         }
         .btn-main:hover { background-color: #2b6cb0; }
         
         .btn-sub {
             flex: 1;
-            background-color: #edf2f7;
-            color: #4a5568;
+            background-color: #2d2d34; /* ปุ่มรองสีเทาเข้มเข้ากับธีม */
+            color: #e2e8f0; /* ตัวอักษรปุ่มรองสีขาวนวล */
             font-size: 0.9rem;
             padding: 12px;
         }
-        .btn-sub:hover { background-color: #e2e8f0; color: #2d3748; }
+        .btn-sub:hover { background-color: #4a4a5a; color: #ffffff; }
 
-        /* Notification style */
+        /* Notification style (Toast) */
         .toast {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background-color: #48bb78;
+            background-color: #38a169; /* ปรับเขียวให้เข้มขึ้นสไตล์ Dark Mode */
             color: white;
             padding: 12px 24px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             display: none;
             font-weight: 500;
             animation: slideIn 0.3s ease-out;
@@ -110,7 +118,7 @@
             from { transform: translateY(100px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-
+        
         .sidebar {
             width: 250px;
             background: #f8fafc;
