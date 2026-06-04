@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>borntoDev Content Formatter (Full Pattern)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121214; /* พื้นหลังเว็บสีดำเข้ม */
+            color: #e3e6eb; /* สีตัวอักษรขาวนวล */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #1e1e24; /* กล่องข้อความสีเทาเข้ม */
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        h2 {
+            color: #ffffff;
+            margin-top: 0;
+            border-bottom: 2px solid #2d2d34;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #a0aec0; /* สี Label เทาอ่อน */
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 12px;
+            background-color: #2d2d34; /* ช่องพิมพ์สีเทา */
+            border: 1px solid #4a4a5a;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 15px;
+            line-height: 1.6;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+        textarea:focus {
+            border-color: #3182ce; /* ไฮไลท์สีฟ้าตอนโฟกัส */
+            outline: none;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .btn-convert {
+            background-color: #3182ce; /* ปุ่มแปลงไฟล์สีฟ้าเด่น */
+            color: white;
+            flex: 1;
+        }
+        .btn-copy {
+            background-color: #38a169; /* ปุ่มก๊อปปี้สีเขียว */
+            color: white;
+        }
+        textarea[readonly] {
+            background-color: #252529; /* ช่องผลลัพธ์สีเข้มกว่าเดิมเล็กน้อยเพื่อให้รู้ว่าอ่านได้อย่างเดียว */
+            color: #cbd5e0;
+        }
+        .toast {
+            display: none;
+            background: #ffffff;
+            color: #121214;
+            padding: 10px 20px;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🦖 เครื่องมือจัดฟอร์แมตข้อความ (Full Pattern)</h2>
+    
+    <div class="form-group">
+        <label for="inputText">ข้อความต้นฉบับ:</label>
+        <textarea id="inputText" placeholder="วางข้อความที่นี่..."></textarea>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn-convert" onclick="formatText()">แปลงรูปแบบข้อความ ✨</button>
+    </div>
+
+    <div class="form-group">
+        <label for="outputText">ผลลัพธ์ (เพิ่มจุดหัว-ท้าย + สลับอิโมจิ):</label>
+        <textarea id="outputText" readonly placeholder="ผลลัพธ์จะแสดงที่นี่..."></textarea>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn-copy" onclick="copyToClipboard()">📋 คัดลอกข้อความ</button>
+    </div>
+</div>
+
+<div id="toast" class="toast">คัดลอกลง Clipboard แล้ว!</div>
+
+<script>
+function formatText() {
+    const input = document.getElementById('inputText').value;
+    
+    // 1. แยกข้อความออกเป็นย่อหน้า และกรองบรรทัดว่างออก
+    const paragraphs = input.split(/\r?\n/)
+                            .map(p => p.trim())
+                            .filter(p => p.length > 0);
+    
+    if (paragraphs.length === 0) return;
+
+    // Regex สำหรับลบ Emoji และช่องว่างที่อยู่หน้าสุดของย่อหน้า
+    const emojiRegex = /^([\u200d\u200b\u2100-\u32FF\u2B50\u2B06\u2194-\u2199\u21A9-\u21AA\u25A0-\u27BF\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F\uDE80-\uDEFF]|\uD83E[\uDD00-\uDDFF]|\p{Emoji_Presentation}|\p{Extended_Pictographic})+\s*/gu;
+
+    const total = paragraphs.length;
+    const processedParagraphs = new Array(total);
+
+    // 2. ลูปย้อนกลับจากย่อหน้าสุดท้ายขึ้นไปข้างบนเพื่อสลับอิโมจิ
+    for (let i = total - 1; i >= 0; i--) {
+        const distanceFromLast = (total - 1) - i;
+        let cleanText = paragraphs[i].replace(emojiRegex, '');
+
+        if (distanceFromLast === 0) {
+            // ย่อหน้าสุดท้ายสุด -> บังคับใส่ไดโนเสาร์ 🦖
+            processedParagraphs[i] = `🦖 ${cleanText}`;
+        } else if (distanceFromLast % 2 === 1) {
+            // ห่างเป็นเลขคี่ -> เว้น (ไม่มีอิโมจิ)
+            processedParagraphs[i] = cleanText;
+        } else {
+            // ห่างเป็นเลขคู่ -> มีอิโมจิ (เอาอิโมจิเดิมกลับมาใส่)
+            const originalEmojiMatch = paragraphs[i].match(emojiRegex);
+            const emoji = originalEmojiMatch ? originalEmojiMatch[0].trim() : '💡';
+            processedParagraphs[i] = `${emoji} ${cleanText}`;
+        }
+    }
+    
+    // 3. ต่อข้อความเข้าด้วยกัน คั่นกลางด้วยจุด "."
+    let result = processedParagraphs.join('\n.\n');
+    
+    // 4. เพิ่มจุด "." และการเว้นบรรทัดที่ย่อหน้าแรกสุด และย่อหน้าสุดท้ายสุด
+    result = `.\n${result}\n.`;
+    
+    document.getElementById('outputText').value = result;
+}
+
+function copyToClipboard() {
+    const outputText = document.getElementById('outputText');
+    if (!outputText.value) {
+        alert('ไม่มีข้อความให้คัดลอก กรุณากดแปลงรูปแบบก่อนครับ');
+        return;
+    }
+    
+    outputText.select();
+    outputText.setSelectionRange(0, 99999);
+    
+    navigator.clipboard.writeText(outputText.value).then(() => {
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 2000);
+    }).catch(err => {
+        console.error('ไม่สามารถคัดลอกได้: ', err);
+    });
+}
+</script>
+
+</body>
+</html>
