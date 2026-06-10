@@ -118,6 +118,15 @@
             from { transform: translateY(100px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+
+        .btn-topic {
+            background-color: #e6fffa;
+            color: #234e52;
+            border: 1px solid #b2f5ea;
+        }
+        .btn-topic:hover { 
+            background-color: #b2f5ea; 
+        }
         
         .sidebar {
             width: 250px;
@@ -223,8 +232,9 @@
     <!-- Input ช่องที่ 1 -->
     <div class="form-group">
         <label for="inputText1">Input 1: (ช่องสกัดตัวเลขและเนื้อหาหลัก)</label>
-        <textarea id="inputText1" placeholder="วางข้อความต้นฉบับที่นี่...">Title: เขียน FastAPI ใครยังพิมพ์ uvicorn main:app --reload ยาว ๆ อยู่บ้าง?
-Subtitle: สั่งรันเซิร์ฟเวอร์สั้น ๆ แค่ fastapi dev คำเดียวจบ ชีวิตดีขึ้นแบบ 300%!</textarea>
+        <textarea id="inputText1" placeholder="วางข้อความต้นฉบับที่นี่...">100 - ข้างใน File Docker Image
+• Title: เคยสงสัยไหม ? ไฟล์ Docker Image เก็บอะไรบ้าง หน้าตาเป็นยังไง
+• Subtitle: จาก "สูตรอาหาร" สู่ "กล่องแช่แข็ง" หน้าตาที่แท้จริงของ Docker Image</textarea>
     </div>
 
     <!-- Input ช่องที่ 2 -->
@@ -237,7 +247,7 @@ Subtitle: สั่งรันเซิร์ฟเวอร์สั้น ๆ
     <div class="button-group">
         <!-- ปุ่มหลัก: รวมและสกัดทั้งหมด -->
         <button class="btn-main" onclick="processAndCopyAll()">สกัดและรวมข้อความทั้งหมด</button>
-        
+        <button class="btn-sub btn-topic" onclick="copyFirstLineTopic()">📋 Copy แค่เนื้อ Topic บรรทัดแรก</button>
         <!-- ปุ่มย่อย: เลือกก๊อปปี้เจาะจงเนื้อหา -->
         <div class="sub-btn-group">
             <button class="btn-sub" onclick="copySpecific('title')">📋 Copy แค่เนื้อ Title</button>
@@ -307,6 +317,25 @@ function executeCopy(text) {
         console.error('ไม่สามารถคัดลอกได้: ', err);
         alert('เกิดข้อผิดพลาดในการก๊อปปี้ กรุณาลองใหม่อีกครั้งครับ');
     });
+}
+
+// ฟังก์ชันสกัดเอาแค่เนื้อหา Topic บรรทัดแรกสุด (ตัดตัวเลขและเครื่องหมายลบออก)
+function copyFirstLineTopic() {
+    const input1 = document.getElementById('inputText1').value.trim();
+    
+    if (!input1) {
+        alert('กรุณาใส่ข้อความในช่องแรกก่อนครับคุณวิน');
+        return;
+    }
+
+    // 1. แยกเอาเฉพาะบรรทัดแรกสุดออกมาใช้งาน
+    const firstLine = input1.split('\n')[0].trim();
+    
+    // 2. ใช้ Regex ตัดตัวเลขและเครื่องหมายลบด้านหน้าสุด (เช่น "100 - ")
+    const cleanedTopic = firstLine.replace(/^\d+\s*-\s*/, '');
+
+    // 3. ส่งข้อมูลเข้า Clipboard ทันที
+    executeCopy(cleanedTopic);
 }
 
 function showToast() {
