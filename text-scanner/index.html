@@ -222,6 +222,14 @@
             color: transparent;
             border-radius: 3px;
         }
+
+        /* ส่วนที่เพิ่ม: เอฟเฟกต์ปุ่มรวมข้อความ */
+        #mergeBtn:hover {
+            background-color: #1d4ed8 !important;
+        }
+        #mergeBtn:active {
+            background-color: #1e40af !important;
+        }
     </style>
 </head>
 <body>
@@ -233,7 +241,7 @@
         <li><a href="../text-scanner/" class="active">📄 Text Scanner</a></li>
         <li><a href="../content-formatter/">📋 Content Formatter</a></li>
         <li><a href="../uuid-generator/">🆔 UUID Generator</a></li>
-        <li><a href="../extractor/">📋 Extractor Merger</a></li>
+        <li><a href="../extractor/">📋 Extractor Merger</a></li >
         <li><a href="../emoji-dot/">📋 Emoji & Dot</a></li>
     </ul>
 </aside>
@@ -242,7 +250,7 @@
 
 <div class="main-content">
 <div class="container">
-    <h2>Text Scanner & Word Counter v.1.0.1</h2>
+    <h2>Text Scanner & Word Counter v.2.0.0</h2>
     
     
     <div class="stats-container">
@@ -261,6 +269,26 @@
         <div class="backdrop" id="backdrop"></div>
         <textarea id="textInput" placeholder="พิมพ์หรือวางข้อความที่นี่..."></textarea>
     </div>
+
+    <div class="input-group">
+        <label for="promptTemplate">คำสั่งล่วงหน้า (Prompt Template):</label>
+        <textarea id="promptTemplate" style="position: static; height: 160px; background-color: #2d2d34; border: 1px solid #4b5563; color: #ffffff;" placeholder="ใส่คำสั่งสั่งงาน AI ที่นี่...">Rewrite เนื้อหานี้ให้ดูไม่เป็น AI:
+- ลดความเนี้ยบ
+- เพิ่มความเป็นธรรมชาติ
+- ใส่ insight และมุมมอง
+- ตัดคำที่ดู generic ออก
+- คงโครงสร้างไว้
+- ให้ใส่อิโมจิ ต้นย่อหน้าทุกย่อหน้า
+- เสร็จแล้วให้เช็คอีกครั้ง หากยังไม่ได้ให้ rewrite ด้วยตัวเองอีกครั้ง
+- หากจำนวนคำเยอะเกินไป ให้ลดจำนวนคำลง และลดการใช้คำเปลือง</textarea>
+    </div>
+
+    <div class="input-group" style="margin-bottom: 25px;">
+        <button id="mergeBtn" onclick="mergeAndCopy()" style="width: 100%; padding: 14px; background-color: #2563eb; color: white; border: none; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background-color 0.2s;">
+            🔗 รวมข้อความ + คัดลอกพร้อมใช้งาน (Copy)
+        </button>
+    </div>
+
 </div>
 
 <script>
@@ -344,6 +372,37 @@
 
     textInput.addEventListener('input', processText);
     searchWordInput.addEventListener('input', processText);
+
+    // ส่วนที่เพิ่ม: ฟังก์ชันรวมข้อความจาก 2 กล่องเข้าด้วยกันแล้วส่งเข้า Clipboard
+    function mergeAndCopy() {
+        const promptText = document.getElementById('promptTemplate').value;
+        const mainText = textInput.value;
+        const mergeBtn = document.getElementById('mergeBtn');
+
+        if (!mainText.trim()) {
+            alert('กรุณาใส่ข้อความในช่องสแกนก่อนครับ');
+            return;
+        }
+
+        // จัดฟอร์แมต: เอาคำสั่งขึ้นก่อน เคาะบรรทัดใหม่ 2 ที แล้วตามด้วยเนื้อหาจากช่องสแกน
+        const finalResult = `${promptText}\n\n${mainText}`;
+
+        // สั่งคัดลอกลงคอมพิวเตอร์/มือถืออัตโนมัติ
+        navigator.clipboard.writeText(finalResult).then(() => {
+            // เอฟเฟกต์เปลี่ยนสีปุ่มชั่วคราวเพื่อให้ผู้ใช้รู้ว่าก๊อปปี้สำเร็จแล้ว
+            const originalText = mergeBtn.innerText;
+            mergeBtn.innerText = "✅ รวมและคัดลอกลงคลิปบอร์ดแล้ว!";
+            mergeBtn.style.backgroundColor = "#16a34a"; // เปลี่ยนเป็นสีเขียว
+            
+            setTimeout(() => {
+                mergeBtn.innerText = originalText;
+                mergeBtn.style.backgroundColor = "#2563eb"; // กลับเป็นสีฟ้าเดิม
+            }, 2000);
+        }).catch(err => {
+            console.error('ไม่สามารถคัดลอกข้อความได้: ', err);
+            alert('เกิดข้อผิดพลาดในการคัดลอกข้อความอัตโนมัติ');
+        });
+    }
 
     // Toggle Sidebar
     function toggleSidebar() {
