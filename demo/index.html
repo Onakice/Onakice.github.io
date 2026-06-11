@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A/B Testing Demo Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap');
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-center items-center p-6">
+
+    <div class="text-center mb-10 max-w-2xl">
+        <span class="bg-indigo-500/10 text-indigo-400 text-sm font-semibold px-3 py-1 rounded-full border border-indigo-500/20">
+            Product Development Lab
+        </span>
+        <h1 class="text-3xl font-bold mt-3 text-white">ระบบจำลองการทำ A/B Testing</h1>
+        <p class="text-slate-400 mt-2 text-sm">เปรียบเทียบพฤติกรรมผู้ใช้ระหว่างปุ่ม 2 เวอร์ชัน เพื่อหาเวอร์ชันที่สร้าง Conversion ได้ดีที่สุด</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
+        
+        <div class="bg-slate-800/50 border-2 border-slate-700 rounded-2xl p-8 flex flex-col justify-between relative overflow-hidden shadow-xl">
+            <div class="absolute top-0 right-0 bg-slate-700 text-slate-300 text-xs font-bold px-4 py-1.5 rounded-bl-xl uppercase tracking-wider">
+                Version A (Control)
+            </div>
+            
+            <div class="mt-4">
+                <h2 class="text-xl font-bold text-slate-200">คอร์สเรียนอัปสกิล DevOps 101</h2>
+                <p class="text-slate-400 text-sm mt-2 leading-relaxed">
+                    เรียนรู้การทำ CI/CD, Containerization ด้วย Docker และ Orchestration ด้วย Kubernetes ตั้งแต่เริ่มต้นจนประยุกต์ใช้งานได้จริงในองค์กร
+                </p>
+                <div class="mt-6 flex items-baseline gap-2">
+                    <span class="text-3xl font-bold text-white">฿2,990</span>
+                    <span class="text-sm text-slate-500 line-through">฿4,500</span>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <button class="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 px-6 rounded-xl transition duration-200 text-center cursor-pointer shadow-lg">
+                    สมัครเรียนตอนนี้
+                </button>
+                <!-- <p class="text-center text-xs text-slate-500 mt-2">ปุ่มสีเดิมที่ระบบใช้อยู่ปัจจุบัน</p> -->
+            </div>
+        </div>
+
+        <div class="bg-slate-800/50 border-2 border-emerald-500/50 rounded-2xl p-8 flex flex-col justify-between relative overflow-hidden shadow-xl shadow-emerald-950/20">
+            <div class="absolute top-0 right-0 bg-emerald-500 text-slate-900 text-xs font-bold px-4 py-1.5 rounded-bl-xl uppercase tracking-wider">
+                Version B (New)
+            </div>
+            
+            <div class="mt-4">
+                <h2 class="text-xl font-bold text-slate-200">คอร์สเรียนอัปสกิล DevOps 101</h2>
+                <p class="text-slate-400 text-sm mt-2 leading-relaxed">
+                    เรียนรู้การทำ CI/CD, Containerization ด้วย Docker และ Orchestration ด้วย Kubernetes ตั้งแต่เริ่มต้นจนประยุกต์ใช้งานได้จริงในองค์กร
+                </p>
+                <div class="mt-6 flex items-baseline gap-2">
+                    <span class="text-3xl font-bold text-white">฿2,990</span>
+                    <span class="text-sm text-slate-500 line-through">฿4,500</span>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <button class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 px-6 rounded-xl transition duration-200 text-center cursor-pointer shadow-lg shadow-emerald-500/20 transform hover:-translate-y-0.5">
+                    สมัครเรียนตอนนี้ 🚀
+                </button>
+                <!-- <p class="text-center text-xs text-emerald-400/80 mt-2">สมมติฐาน: สีเขียวสดใสพร้อม Emoji จะช่วยเพิ่มยอดสมัคร</p> -->
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-10 text-center text-xs text-slate-500">
+        <p>Tips: ในระบบจริง ระบบจะสุ่มแบ่ง Traffic (50/50) เพื่อให้ผู้ใช้แต่ละกลุ่มเห็นเพียงเวอร์ชันเดียวเท่านั้น</p>
+    </div>
+
+</body>
+</html>
